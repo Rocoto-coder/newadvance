@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Jeff</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .stars {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+            z-index: 0;
+        }
+
+        .star {
+            width: 2px;
+            height: 2px;
+            background: white;
+            position: absolute;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .speech-bubble {
+            width: 300px;
+            min-height: 100px;
+            background: white;
+            border: 4px solid #555;
+            border-radius: 8px;
+            position: absolute;
+            margin-bottom: 250px;
+            padding: 15px;
+            box-shadow: 4px 4px 0 #00000033;
+            z-index: 3;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 0;
+            top: 20%;
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 20%;
+            border-width: 15px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+        }
+
+        .speech-text {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #000;
+            line-height: 1.5;
+        }
+
+        .sprite-container {
+            position: absolute;
+            left: 50%;
+            top: 19%; /* Posición vertical ajustable */
+            transform: translateX(-50%);
+            z-index: 2;
+            margin: 0;
+        }
+
+        .pixel-shadow {
+            width: 100px;
+            height: 20px;
+            background: radial-gradient(circle, #444 0%, #444 50%, transparent 100%);
+            border-radius: 50%;
+            filter: blur(1px);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .sprite {
+            width: 400px;
+            height: 400px;
+            image-rendering: crisp-edges;
+            position: relative;
+            z-index: 1;
+            object-fit: contain;
+        }
+
+        /* Estilos para las flores */
+        .flower {
+            position: absolute;
+            width: 40px;
+            height: 60px;
+            z-index: 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .flower::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 40px;
+            background: #4CAF50;
+            left: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 2px 0 #00000033;
+        }
+
+        .flower::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #FF4081;
+            border-radius: 50%;
+            bottom: 30px;
+            left: 5px;
+            box-shadow: 
+                15px 15px 0 #FFD740,
+                -15px 15px 0 #FFD740,
+                15px -15px 0 #FFD740,
+                -15px -15px 0 #FFD740;
+            animation: rotate 4s linear infinite;
+        }
+
+        .flower-left {
+            left: 15%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .flower-right {
+            right: 15%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: #000;
+            animation: blink 0.8s infinite;
+            margin-left: 4px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .skip-link {
+            position: fixed;
+            bottom: 20px;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            text-decoration: none;
+            z-index: 4;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+
+    <div class="stars">
+        <!-- Genera 100 estrellas -->
+        {% for star in stars %}
+        <div class="star" style="top: {{ star.top }}%; left: {{ star.left }}%; animation-delay: {{ star.delay }}s;"></div>
+        {% endfor %}
+
+    <div class="speech-bubble">
+        <div class="speech-text" id="text"></div>
+    </div>
+
+    <!-- Flores izquierda -->
+    <div class="flower flower-left"></div>
+    <div class="flower flower-left" style="left: 10%; top: 55%; transform: scale(0.8) translateY(-50%);"></div>
+    <div class="flower flower-left" style="left: 20%; top: 45%; transform: scale(1.2) translateY(-50%);"></div>
+
+    <div class="sprite-container">
+        <img src="{% static 'images/soldado.gif' %}" class="sprite sprite-animation" alt="Personaje">
+        <div class="pixel-shadow"></div>
+    </div>
+
+    <!-- Flores derecha -->
+    <div class="flower flower-right"></div>
+    <div class="flower flower-right" style="right: 10%; top: 55%; transform: scale(0.8) translateY(-50%);"></div>
+    <div class="flower flower-right" style="right: 20%; top: 45%; transform: scale(1.2) translateY(-50%);"></div>
+
+    <a href="{% url 'contenido' %}" class="skip-link">Saltar</a>
+
+    <script>
+        const messages = [
+            "¡BIENVENIDO, JEFF!",
+            "Me alegro que estés aquí ^^",
+            "Esto lo preparé con mucho cariño y dedicación, espero te guste",
+            '<a href="{% url "contenido" %}" style="color: #ff0000; text-decoration: none;">Dale click para continuar ▶</a>'
+        ];
+        
+        let messageIndex = 0;
+        let index = 0;
+        const textElement = document.getElementById('text');
+        let cursorVisible = true;
+
+        function typeWriter() {
+            if (index < messages[messageIndex].length) {
+                textElement.innerHTML = messages[messageIndex].substring(0, index + 1) + 
+                                      '<span class="cursor"></span>';
+                index++;
+                setTimeout(typeWriter, 100);
+            } else {
+                if (messageIndex < messages.length - 1) {
+                    messageIndex++;
+                    index = 0;
+                    setTimeout(typeWriter, 1000);
+                } else {
+                    textElement.innerHTML = messages[messageIndex];
+                }
+            }
+        }
+
+        window.onload = typeWriter;
+
+        setInterval(() => {
+            cursorVisible = !cursorVisible;
+            const cursor = document.querySelector('.cursor');
+            if (cursor) {
+                cursor.style.opacity = cursorVisible ? 1 : 0;
+            }
+        }, 400);
+    </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Jeff</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: #813b3b;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .character-container {
+            flex: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .info-bubble {
+            flex: 2;
+            background: white;
+            border: 4px solid #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            min-height: 300px;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .info-bubble::after {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 50px;
+            border-width: 15px;
+            border-style: solid;
+            border-color: transparent white transparent transparent;
+        }
+
+        .tab-bar {
+            display: flex;
+            gap: 2px;
+            justify-content: flex-start;
+            margin: 50px 0 0;
+            padding-left: 20px;
+        }
+
+        .option-button {
+            background: #ffffff;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            color: #333;
+            padding: 12px 30px;
+            font-family: 'Press Start 2P', cursive;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            top: 1px;
+            border-bottom: none;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            text-transform: none;
+        }
+
+        .option-button:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+
+        .active-tab {
+            background: white !important;
+            color: #ff0000 !important;
+            z-index: 2;
+            border-color: #ff0000;
+        }
+
+        .content-section {
+            display: none;
+            background: rgb(255, 255, 255);
+            border: 4px solid #ffffff;
+            padding: 20px;
+            margin: -2px 0 20px;
+            font-family: 'Press Start 2P', cursive;
+            border-top: none;
+            border-radius: 8px;
+        }
+
+        .content-active {
+            display: block;
+            animation: appear 0.5s ease-out;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .sprite {
+            width: 100%;
+            height: auto;
+            image-rendering: crisp-edges;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .gallery-item {
+            text-align: center;
+        }
+
+        .gallery img {
+            width: 100%;
+            image-rendering: pixelated;
+            cursor: pointer;
+        }
+
+        .gallery p {
+            margin-top: 10px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            margin: 15% auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #dedicatoria-content {
+            text-align: justify;
+        }
+
+        #dedicatoria-content p {
+            line-height: 1.8; /* Ajusta este valor para el espaciado entre líneas */
+            margin-bottom: 20px; /* Ajusta este valor para el espaciado entre párrafos */
+            max-width: 600px; /* Ajusta este valor para el ancho del texto */
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    
+    <div class="main-container">
+        <div class="character-container">
+            <img src="{% static 'images/gif de mona.gif' %}" class="sprite" alt="Personaje">
+        </div>
+        
+        <div class="info-bubble">
+            <h2>¡BIENVENIDO JEFF!</h2>
+            <p>Selecciona una pestaña para ver:</p>
+            <ul>
+                <li>🎮 Fotos</li>
+                <li>💌 Mensaje especial</li>
+                <li> Especial 7u7</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-bar">
+        <button class="option-button active-tab" onclick="showContent('images')">🎮 Fotos</button>
+        <button class="option-button" onclick="showContent('dedicatoria')">💌 Dedicatoria</button>
+        <button class="option-button" onclick="showContent('roblox')">Especial 7u7</button>
+    </div>
+
+    <!-- Sección de Fotos -->
+    <div id="images-content" class="content-section content-active">
+        <h3>🎮 Album</h3>
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="{% static 'images/foto1.png' %}" alt="Foto 1" onclick="openModal(this)">
+                <p>Violandote</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto2.png' %}" alt="Foto 2" onclick="openModal(this)">
+                <p>Barco pene</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto3.png' %}" alt="Foto 3" onclick="openModal(this)">
+                <p>Batallas de rap Bv</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto4.png' %}" alt="Foto 4" onclick="openModal(this)">
+                <p>Viaje en autito</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto5.png' %}" alt="Foto 5" onclick="openModal(this)">
+                <p>Aún no estás para la licencia de conducir :v</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto6.png' %}" alt="Foto 6" onclick="openModal(this)">
+                <p>Pozole de lavadero</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto7.png' %}" alt="Foto 7" onclick="openModal(this)">
+                <p>Con las cariñosas</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto8.png' %}" alt="Foto 8" onclick="openModal(this)">
+                <p>Cuando se metio ese pene con patas</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto9.png' %}" alt="Foto 9" onclick="openModal(this)">
+                <p>Cogiendote a Grava</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto10.png' %}" alt="Foto 10" onclick="openModal(this)">
+                <p>Que presentables nos vemos ^^</p>
+            </div>
+            <div class="gallery-item">
+                <img src="{% static 'images/foto11.png' %}" alt="Foto 11" onclick="openModal(this)">
+                <p>Sin comentarios...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver las fotos en grande -->
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="img01">
+    </div>
+
+    <!-- Sección de Dedicatoria -->
+    <div id="dedicatoria-content" class="content-section">
+        <h3>💌 Para mi gran amigo Jeff</h3>
+        <p>
+            Buenas Jeff, esperando que estes leyendo esto, me gustaría compartirte algo.
+            Te quería agradecer por estar siempre a mi lado, incluso cuando he sido pesada, 
+            no te has apartado ^^ Sé que suelo ser algo así a veces, sin embargo no es con intención,
+            si no que me preocupo por ti, además que es un caracter que se me ha ido formando a lo largo
+            de los años, pero no te preocupes, siempre estaré a tu lado, para apoyarte en lo que necesites. 
+            Gracias por ser mi amigo todo este tiempo y que sea por un largo tiempo así. Espero la pases 
+            muy bien este día que te lleguen muchas fototetas :v  
+
+            Con cariño, tu amiga que te quiere mucho,
+            Belén.
+        </p>
+    </div>
+
+    <!-- Sección de Roblox -->
+    <div id="roblox-content" class="content-section">
+        <h3>Fototeta</h3>
+        <ul style="text-align: center; list-style: none; padding-left: 0;">
+            <li>Amo fototeta </li>
+        </ul>
+        <div style="text-align: center; margin: 20px 0;">
+            <img src="{% static 'images/fototeta.jpeg' %}" alt="" style="max-width: 300px;">
+        </div>
+    </div>
+    </div>
+
+    <script>
+        function showContent(type) {
+            // Actualizar pestañas activas
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('active-tab');
+            });
+            event.target.classList.add('active-tab');
+            
+            // Ocultar/Mostrar contenido
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('content-active');
+            });
+            
+            const section = document.getElementById(`${type}-content`);
+            if(section) {
+                section.classList.add('content-active');
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Función para abrir el modal
+        function openModal(element) {
+            const modal = document.getElementById("myModal");
+            const modalImg = document.getElementById("img01");
+            modal.style.display = "block";
+            modalImg.src = element.src;
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            const modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+    </script>
+</body>
+</html>
